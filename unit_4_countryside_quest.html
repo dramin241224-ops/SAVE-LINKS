@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unit 4: Countryside Quest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #a3e635; /* Lime 400 */
+            background-image: radial-gradient(#bef264 20%, transparent 20%), radial-gradient(#bef264 20%, transparent 20%);
+            background-color: #a3e635;
+            background-position: 0 0, 25px 25px;
+            background-size: 50px 50px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .jiggle:hover {
+            animation: jiggle 0.5s ease-in-out infinite both;
+        }
+        @keyframes jiggle {
+            0% { transform: rotate(-3deg); }
+            50% { transform: rotate(3deg); }
+            100% { transform: rotate(-3deg); }
+        }
+        .sun {
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            width: 100px;
+            height: 100px;
+            background: #fde047;
+            border-radius: 50%;
+            box-shadow: 0 0 40px #facc15;
+            animation: pulse 3s infinite alternate;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <div class="bg-white rounded-3xl shadow-2xl p-8 w-full max-w-3xl text-center relative border-8 border-green-500 overflow-hidden">
+        <div class="sun"></div>
+        <h1 class="text-4xl text-green-700 mb-2 font-bold z-10 relative">Unit 4: In the Countryside</h1>
+        <p class="text-gray-500 mb-8 font-bold z-10 relative">Words: road, river, rainbow</p>
+
+        <!-- View 1: Click the Correct Picture -->
+        <div id="game1">
+            <h2 class="text-2xl mb-6 text-indigo-600 font-bold" id="instruction">Find the <span id="target-word" class="text-pink-500 uppercase text-3xl">RAINBOW</span></h2>
+            
+            <div class="flex justify-around items-center gap-4 mb-8">
+                <div class="cursor-pointer jiggle bg-indigo-50 p-6 rounded-2xl border-4 border-transparent hover:border-indigo-300 transition" onclick="checkImage('river')">
+                    <span class="text-7xl">🏞️</span>
+                </div>
+                <div class="cursor-pointer jiggle bg-pink-50 p-6 rounded-2xl border-4 border-transparent hover:border-pink-300 transition" onclick="checkImage('rainbow')">
+                    <span class="text-7xl">🌈</span>
+                </div>
+                <div class="cursor-pointer jiggle bg-gray-50 p-6 rounded-2xl border-4 border-transparent hover:border-gray-300 transition" onclick="checkImage('road')">
+                    <span class="text-7xl">🛣️</span>
+                </div>
+            </div>
+            
+            <div id="feedback1" class="text-2xl font-bold h-8 text-green-500"></div>
+        </div>
+
+        <!-- View 2: Correct Sentence -->
+        <div id="game2" class="hidden">
+            <h2 class="text-2xl mb-6 text-indigo-600 font-bold">Choose the correct sentence for the picture!</h2>
+            <div class="text-8xl mb-6">🌈</div>
+            
+            <div class="flex flex-col gap-4 max-w-md mx-auto">
+                <button onclick="checkSentence(false)" class="bg-white border-4 border-blue-200 hover:bg-blue-50 text-gray-700 text-xl py-4 px-6 rounded-2xl shadow transition text-left">
+                    There's a river in the sky.
+                </button>
+                <button onclick="checkSentence(true)" class="bg-white border-4 border-blue-200 hover:bg-blue-50 text-gray-700 text-xl py-4 px-6 rounded-2xl shadow transition text-left">
+                    There's a rainbow in the sky.
+                </button>
+                <button onclick="checkSentence(false)" class="bg-white border-4 border-blue-200 hover:bg-blue-50 text-gray-700 text-xl py-4 px-6 rounded-2xl shadow transition text-left">
+                    I can see a road.
+                </button>
+            </div>
+            <div id="feedback2" class="mt-6 text-2xl font-bold h-8 text-green-500"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const targets = ['rainbow', 'river', 'road'];
+        let currentIndex = 0;
+
+        function checkImage(selected) {
+            const target = targets[currentIndex];
+            const feedback = document.getElementById('feedback1');
+            
+            if (selected === target) {
+                feedback.innerText = "Correct! 🌟";
+                feedback.className = "text-2xl font-bold h-8 text-green-500";
+                
+                currentIndex++;
+                setTimeout(() => {
+                    if (currentIndex < targets.length) {
+                        feedback.innerText = "";
+                        document.getElementById('target-word').innerText = targets[currentIndex].toUpperCase();
+                    } else {
+                        // Move to game 2
+                        document.getElementById('game1').classList.add('hidden');
+                        document.getElementById('game2').classList.remove('hidden');
+                    }
+                }, 1000);
+            } else {
+                feedback.innerText = "Try again!";
+                feedback.className = "text-2xl font-bold h-8 text-red-500";
+            }
+        }
+
+        function checkSentence(isCorrect) {
+            const feedback = document.getElementById('feedback2');
+            if (isCorrect) {
+                feedback.innerText = "Fantastic! You win! 🏆";
+                feedback.className = "mt-6 text-2xl font-bold h-8 text-green-500";
+                setTimeout(() => location.reload(), 3000);
+            } else {
+                feedback.innerText = "Oops, read carefully!";
+                feedback.className = "mt-6 text-2xl font-bold h-8 text-red-500";
+                setTimeout(() => feedback.innerText = "", 1500);
+            }
+        }
+    </script>
+</body>
+</html>
